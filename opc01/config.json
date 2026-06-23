@@ -1,0 +1,30 @@
+{
+    "projectTitle": "opc01",
+    "opc": {
+        "endpoint": "opc.tcp://192.168.232.30:26543",
+        "connection": {
+            "applicationName": "OPC-UA Reader",
+            "connectionStrategy": {
+                "initialDelay": 250,
+                "maxDelay": 500,
+                "maxRetry": 1
+            },
+            "endpointMustExist": false
+        },
+        "userIdentity": {
+            "needed": false,
+            "username": "user",
+            "password": "user"
+        },
+        "subscription": {
+            "parameters": {
+                "requestedPublishingInterval": 1000,
+                "requestedLifetimeCount": 100,
+                "requestedMaxKeepAliveCount": 10,
+                "maxNotificationsPerPublish": 100,
+                "publishingEnabled": true,
+                "priority": 10
+            }
+        }
+    }
+}

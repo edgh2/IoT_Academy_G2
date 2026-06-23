@@ -1,0 +1,17 @@
+{
+    "mqtt": {
+        "brokerUrl": "mqtt://192.168.232.31",
+        "mqttPort": 1883,
+        "baseTopic": "ACADEMY99/"
+    },
+    "topic": {
+        "organization": "magna",
+        "division": "iotacademy",
+        "plant": "conestoga",
+        "area": "smart",
+        "line": "presorter",
+        "workstation": "G2",
+        "type": "robot"
+    },
+    "projectTitle": "opc01"
+}

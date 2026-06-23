@@ -1,0 +1,106 @@
+/*
+	index.js
+*/
+
+import * as fs from 'fs';
+import * as opcua from 'node-opcua-client';
+
+const config:any = readFileAsJSON("./config.json");;
+
+function readFileAsArray(fname:string) : string[]
+{
+	try {
+		let textlines:string[] = fs.readFileSync(fname).toString().split("\r\n");
+		return textlines;
+	} catch (err) {
+		console.log(err);
+		return [];
+	}
+}
+
+function readFileAsJSON (fname:string) : any
+{
+	try {
+		let data:string = fs.readFileSync(fname).toString();
+		return JSON.parse(data);
+	} catch (err) {
+		console.log(err);
+		return [];
+	}
+}
+
+async function readOPCTags(tags:string[])
+{
+	try {
+		const opcClient = opcua.OPCUAClient.create(config.opc.connection);
+
+		await opcClient.connect (config.opc.endpoint);
+		console.log("Connected to OPC UA server at: ", config.opc.endpoint);
+
+		let session:opcua.ClientSession = await opcClient.createSession();
+		console.log('Session created');
+
+		setInterval(processreadRequest, 1000, session, tags);
+		//await processreadRequest(session, tags);
+
+		const shutdown = async () => {
+			console.log("Disconnecting from OPCUA");
+			await opcClient.disconnect();
+			process.exit();
+		}
+
+		process.on ('SIGINT', shutdown);
+		process.on ('SIGTERM', shutdown);
+
+	} catch (err) {
+		console.log("Error: ", err);
+	}
+}
+
+async function processreadRequest (opcsession:opcua.ClientSession, tags:string[])
+{
+	let nodeID:string = "";
+	let data:any;
+	
+	for (let i:number = 0; i < tags.length; i++) {
+
+		let nodeID:string = "ns=1;s=" + tags[i];
+		data = await opcsession.read ({
+			nodeId: nodeID,
+			attributeId: opcua.AttributeIds.Value
+		});
+		handleDataReceived(tags[i] ?? "", data);
+	}
+}
+
+async function handleDataReceived (tagname:string, dataValue:opcua.DataValue)
+{
+	let filename:string = "C:\\Users\\iot-group2\\Desktop\\capstone\\opc02\\data.csv";
+	let d = new Date();
+	console.log(`TS: ${d.toISOString()} -- ${tagname} = ${dataValue.value.value}`);
+	
+	try {
+		await fs.writeFile(filename, `${d.toISOString()},${dataValue.value.value}\n`, { flag: 'a+' }, err => {});
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+
+
+
+async function main()
+{
+	//config = readFileAsJSON("./config.json");
+	console.log("endpoint:", config.opc.endpoint);
+	console.log("Project title: ", config.projectTitle);
+	let tags:string[];
+	tags = readFileAsArray("./tags.txt");
+	for (let i:number = 0; i<tags.length; i++) {
+		console.log("Tag", i, "holds", tags[i]);
+	}
+
+	await readOPCTags(tags);
+}
+
+main()	;

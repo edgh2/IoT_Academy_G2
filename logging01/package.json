@@ -1,0 +1,23 @@
+{
+  "devDependencies": {
+    "@types/node": "^25.9.3"
+  },
+  "name": "project00",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@types/winston": "^2.4.4",
+    "undici-types": "^7.24.6",
+    "winston": "^3.19.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
