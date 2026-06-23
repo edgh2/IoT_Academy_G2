@@ -4,11 +4,19 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import * as pg from 'pg';
 import express from 'express';
 import type { Request, Response, NextFunction } from 'express';
 
 
 const config:any = readFileAsJSON("./config.json");;
+
+interface IoTRow {
+  tag: string;
+  device:string,
+  datestamp: Date;
+  value: number;
+}
 
 function readFileAsArray(fname:string) : string[]
 {
@@ -71,6 +79,7 @@ function main()
 		res.send ("Welcom  to our first TypeScript REST API App!")
 	});
 
+	/*
 	const apiRouter:express.Router = express.Router();
 	apiRouter.use( (req:Request, res:Response, next:NextFunction) => {
 		console.log("apiRouter specific middleware!");
@@ -96,6 +105,74 @@ function main()
 	});
 
 	app.use(apiRouter);
+
+*/
+
+
+	const apiRouter2:express.Router = express.Router();
+
+	apiRouter2.use( (req:Request, res:Response, next:NextFunction) => {
+		console.log("apiRouter2 specific middleware!");
+		next();
+	})
+
+	apiRouter2.get( '/timetable/filter', async (req:Request, res:Response) => {
+		
+		let metric = req.query.metric?.toString()?? "";
+		let from_ts = req.query.from?.toString()?? "";
+		let to_ts = req.query.to?.toString()?? "";
+		let limit = convertDataToInteger(req.query?.limit, 100);
+		
+		let from:Date = new Date(from_ts);
+		let to:Date = new Date(to_ts);
+
+		if (isNaN(from.getTime())) {
+			console.log("Bad start date");
+			return;
+		}
+
+		if (isNaN(to.getTime())) {
+			console.log("Bad start date");
+			return;
+		}
+
+		let sql_command = `SELECT tag, CASE WHEN position('Rob' in tag) = 0 THEn 'cell'
+								else substring(tag, position('Rob' in tag), 4) end as "device",
+								datestamp, value
+							FROM public."tb_OPC_TagLogs" t
+								inner join public."tb_OPC_TagSetup" s on "tagSetupUID" = s.uid
+							where tag = '${metric}' and datestamp between '${from.toISOString()}' and '${to.toISOString()}'
+							order by datestamp desc
+							limit ${limit};`;
+		
+		console.log(sql_command);
+
+		const dbclient = new pg.Client (config.sql);
+		let jsonString: string = "";
+
+		try
+		{
+			dbclient.connect();
+			const result = await dbclient.query<IoTRow>(sql_command);	
+			jsonString = JSON.stringify(result.rows);
+			
+		}catch (err){
+			console.log(err)
+		}
+		finally
+		{
+			dbclient.end();
+		}
+
+		//let tableoutput:string[] = generateTimesTable ();
+		res.json(jsonString);
+	});
+
+	app.use(apiRouter2);
+
+
+
+
 	app.listen (config.port, () => {
 		console.log (`Hello Cambridge, I'm listening! (on port ${config.port})`);
 	});

@@ -53,7 +53,7 @@ async function processMessageReceived(t, p) {
         let value = (payload.value.toLowerCase() === "true");
         sql_command =
             "INSERT INTO equipment_status (timestamp,deviceid,status_name,status,payload) " +
-                `VALUES('${ts}', '${deviceId}', '${status_name}', ${value}, '${JSON.stringify(payload)}')`;
+                `VALUES('${ts}', '${metric}', '${status_name}', ${value}, '${JSON.stringify(payload)}')`;
     }
     else {
         let value = parseFloat(payload.value);
