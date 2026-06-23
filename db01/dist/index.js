@@ -6,6 +6,7 @@ import * as path from 'path';
 import * as mqtt from 'mqtt';
 import * as pg from 'pg';
 import { is_iMQTTPayload } from "./interface.js";
+import { json } from 'stream/consumers';
 const configPath = path.dirname(import.meta.filename) + "/../";
 const configFileName = setConfigurationFilename("config.json");
 const tagsFileName = `${configPath}/tags.txt`;
@@ -46,9 +47,20 @@ async function processMessageReceived(t, p) {
     let deviceId = components[6] ?? "device";
     let metric = components[7] ?? "metric";
     let ts = payload.timestamp;
-    let value = parseFloat(payload.value);
-    let sql_command = "INSERT INTO telemetry(timestamp,deviceid,metric,value) " +
-        `VALUES('${ts}', '${deviceId}', '${metric}', ${value})`;
+    let sql_command = "";
+    if (t.includes("status")) {
+        let status_name = components.pop()?.split("_").pop() ?? "";
+        let value = (payload.value.toLowerCase() === "true");
+        sql_command =
+            "INSERT INTO equipment_status (timestamp,deviceid,status_name,status,payload) " +
+                `VALUES('${ts}', '${deviceId}', '${status_name}', ${value}, '${JSON.stringify(payload)}')`;
+    }
+    else {
+        let value = parseFloat(payload.value);
+        sql_command =
+            "INSERT INTO telemetry(timestamp,deviceid,metric,value, payload) " +
+                `VALUES('${ts}', '${deviceId}', '${metric}', ${value}, '${JSON.stringify(payload)}')`;
+    }
     await executeQuery(sql_command);
     /*
     let csvdata:string = `"${payload.timestamp}","${t}",${payload.value}\n`;
@@ -66,16 +78,16 @@ const pool = new pg.Pool(config.sql);
 pool.options.max = 10;
 async function executeQuery(sql_command) {
     //const dbclient = new pg.Client (config.sql);
-    let dbclient = await pool.connect();
+    //let dbclient = await pool.connect()	
     try {
-        dbclient.query(sql_command);
+        pool.query(sql_command);
     }
     catch (err) {
         console.log(err);
     }
-    finally {
-        dbclient.release();
-    }
+    //finally{
+    //dbclient.release();
+    //}
 }
 async function main() {
     console.log("Project title:", config.projectTitle);
@@ -98,7 +110,7 @@ async function main() {
             + "/" + config.topic.area
             + "/" + config.topic.line
             + "/" + config.topic.workstation
-            + "/" + config.topic.type
+            //+ "/" + config.topic.type
             + "/#";
         //+ "/" + "HMI_GVL.M.Rob1.ROBOTPOS.X";
         /*mqttclient.on('message', (topic, payload) => {

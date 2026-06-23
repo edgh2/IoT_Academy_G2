@@ -1,4 +1,82 @@
-tag1
-tag2
-tag3
-tag4
+//Robot and cell status information:
+//Cell:
+cell_STATUS_INITIALIZED
+cell_STATUS_RUNNING
+cell_STATUS_MERROR
+cell_STATUS_PAUSED
+cell_STATUS_SAFETY_ENABLE
+
+cell_SPEEDPERCENTAGE
+cell_FINISHEDPARTNUM
+
+//H-Bot:
+rob3_STATUS_INITIALIZED
+rob3_STATUS_RUNNING
+rob3_STATUS_WSVIOLATION
+rob3_STATUS_PAUSED
+
+rob3_SPEEDPERCENTAGE
+rob3_FINISHEDPARTNUM
+
+//Delta Robot 1:
+rob1_STATUS_INITIALIZED
+rob1_STATUS_RUNNING
+rob1_STATUS_WSVIOLATION
+rob1_STATUS_PAUSED
+
+rob1_SPEEDPERCENTAGE
+rob1_FINISHEDPARTNUM
+
+
+//Delta Robot 2:
+rob2_STATUS_INITIALIZED
+rob2_STATUS_RUNNING
+rob2_STATUS_WSVIOLATION
+rob2_STATUS_PAUSED
+
+rob2_SPEEDPERCENTAGE
+rob2_FINISHEDPARTNUM
+
+
+//Robot EOAT position information:
+//H-Bot:
+ROBOTPOS.X
+ROBOTPOS.Y
+ROBOTPOS.Z
+
+//Delta Robot 1:
+ROBOTPOS.X
+ROBOTPOS.Y
+ROBOTPOS.Z
+
+//Delta Robot 2:
+ROBOTPOS.X
+ROBOTPOS.Y
+ROBOTPOS.Z
+
+// Robot motors torque information:
+// each motor has an individual torque value
+// individual motor values accessed using array notation
+// asking for torque data without array gives you an array
+// of 4 values.
+// H-Bot only has 3 motors, Delta robots have 4 motors
+//H-Bot:
+// 3 motors available
+MACTTORQUE_1
+MACTTORQUE_2
+MACTTORQUE_3
+//HMI_GVL.M.Rob3.MACTTORQUE[4] // not implemented in hardware, always reads as 0
+
+//Delta Robot 1:
+// 4 motors available
+MACTTORQUE_1
+MACTTORQUE_2
+MACTTORQUE_3
+MACTTORQUE_4
+
+//Delta Robot 2:
+// 4 motors available
+MACTTORQUE_1
+MACTTORQUE_2
+MACTTORQUE_3
+MACTTORQUE_4

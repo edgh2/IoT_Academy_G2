@@ -82,7 +82,7 @@ async function handleDataReceived(tagname, dataValue, mqttclient) {
     //console.log(`TS: ${d.toISOString()} -- ${tagname} = ${dataValue.value.value}`);
     let nodeID = "";
     //let topic:string = config.mqtt.baseTopic + tagname;
-    if (tagname.includes("STATUS") || tagname.includes("cell")) {
+    if (tagname.includes("STATUS")) {
         tagname = 'status/' + tagname;
     }
     let topic = config.topic.organization

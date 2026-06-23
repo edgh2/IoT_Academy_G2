@@ -121,7 +121,7 @@ async function handleDataReceived (tagname:string,
 
 	let nodeID:string = "";
 	//let topic:string = config.mqtt.baseTopic + tagname;
-	if (tagname.includes("STATUS") || tagname.includes("cell"))
+	if (tagname.includes("STATUS"))
 	{
 		tagname = 'status/' + tagname;
 	}
