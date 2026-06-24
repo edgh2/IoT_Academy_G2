@@ -115,7 +115,7 @@ async function processreadRequest (opcsession:opcua.ClientSession,
 async function handleDataReceived (tagname:string,
 	dataValue:opcua.DataValue, mqttclient:mqtt.MqttClient)
 {
-	let filename:string = "C:\\Users\\iot-group2\\Desktop\\capstone\\opc02\\data.csv";
+	//let filename:string = "C:\\Users\\iot-group2\\Desktop\\capstone\\opc02\\data.csv";
 	let d = new Date();
 	//console.log(`TS: ${d.toISOString()} -- ${tagname} = ${dataValue.value.value}`);
 
@@ -125,6 +125,7 @@ async function handleDataReceived (tagname:string,
 	{
 		tagname = 'status/' + tagname;
 	}
+	
 	let topic:string = config.topic.organization
 							+ "/" + config.topic.division
 							+ "/" + config.topic.plant

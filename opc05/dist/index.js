@@ -77,7 +77,7 @@ async function processreadRequest(opcsession, tags, mqttclient) {
     }
 }
 async function handleDataReceived(tagname, dataValue, mqttclient) {
-    let filename = "C:\\Users\\iot-group2\\Desktop\\capstone\\opc02\\data.csv";
+    //let filename:string = "C:\\Users\\iot-group2\\Desktop\\capstone\\opc02\\data.csv";
     let d = new Date();
     //console.log(`TS: ${d.toISOString()} -- ${tagname} = ${dataValue.value.value}`);
     let nodeID = "";

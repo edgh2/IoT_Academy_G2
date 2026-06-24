@@ -1,0 +1,120 @@
+﻿<!doctype html>
+<head>
+    <title>Simple Dashboard</title>
+</head>
+
+<script>
+
+
+/*
+ * async function getData(url);
+ * 
+ * This function will make the fetch() request to the desired URL
+ * and return the JSON content from the fetch.
+ */
+
+async function getData(url)
+{
+	// get the times table we are interested in 
+	const response = await fetch(url);
+
+	//extract JSON from the http response
+	return await response.json(); 
+}
+
+
+/*
+ * async function updateDashboard();
+ *
+ * This function will be called upon during interval
+ * expiry, fetch API results and update the HTML user interface
+ * based on ids we have set up in our coding below.
+ */
+
+async function updateDashboard()
+{
+
+	let u = "http://127.0.0.1:9000/timestable/";
+	let a = parseInt (document.getElementById("whichTable").value, 10);
+	if (a < 1)
+		a = 1;
+//	document.getElementById("whichTable").value = Math.floor (Math.random() * 10) + 1;
+	u = u + a.toString();
+
+	let j = await getData(u);
+
+	// output full JSON object to console log
+
+	console.log(j);
+
+	let x = Math.floor(Math.random() * j.length);
+
+	document.getElementById("visualizeRandomNumber").innerHTML = j[x];
+}
+
+/*
+ * async function main();
+ *
+ * This function will setup our support for a simple web based visualization
+ * of our PreSorter Robot system.
+ *
+ * For the demonstration, we have a user interface in our web page that
+ * shows a numerical input field, pre-set to value 5, which will represent our
+ * times table. The field has an ID set to "whichTable". 
+ * 
+ * There is a one row table where the first column is a descriptive label
+ * for the second column, which will be a value of interest we wish to
+ * put into that cell in real time. This cell has a unique ID called 
+ * "visualizeRandomNumber", which will be used to allow for updates to
+ * that content at any time in our JavaScript code.
+ *
+ * The main() function will set up a 1 second interval, and upon
+ * each expiration of that interval, our updateDashboard() function will
+ * execute, taking the "whichTable" value, appending that to our  
+ * URL to the local times table API. After the API is completed, we then 
+ * show a random row of the returned JSON data, updating the table
+ * cell by its ID of "visualizeRandomNumber". 
+ *
+ * The approach to making a request, taking JSON data and plugging into
+ * our user interface should allow you to build a reasonably attractive
+ * basic dashboard without resorting to more expansive tools like
+ * Grafana.
+ */
+
+async function main()
+{
+	setInterval (updateDashboard, 1000);
+}
+
+// execute main
+
+main();
+</script>
+
+
+<!-- the user interface for our dashboard is below -->
+
+
+<body>
+
+<h1> Simple Dashboard </h1>
+<p>
+This example will use our times table generator. Once per second,
+the times table API will be called upon, and a random row from the JSON 
+data returned will be displayed.
+
+</p>
+<p>
+<label for="whichtable">Which times table?</label><br />
+<input type="number" id="whichTable" value="5"></input>
+
+<table border=1 width=400>
+<tr>
+<td width="25%">number</td>
+<td width="75%" id="visualizeRandomNumber"> <i>data coming</i></td>
+</tr>
+</table>
+
+</body>
+
+</html>

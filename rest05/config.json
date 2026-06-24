@@ -1,0 +1,13 @@
+{
+    "projectTitle": "rest01",
+    "port": 4000,
+    "g1dbname": "group2_team1",
+    "g2dbname": "g2db001",
+    "sql": {
+        "host": "192.168.232.31",
+        "port": 3306,
+        "database": "group2_team1",
+        "user": "postgres",
+        "password": "academy2024!"
+    }
+}
