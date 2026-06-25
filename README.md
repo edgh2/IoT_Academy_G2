@@ -180,7 +180,3 @@ breakdown.
 - **Agile SRS** — use cases, actors, constraints, failure modes
 - **GitHub Projects board** — epics, user stories, acceptance criteria
 - **Generated JSDoc** — per-service API documentation
-
----
-
-*Magna COSMA IoT Academy · Conestoga College · 2026*
