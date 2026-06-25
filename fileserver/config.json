@@ -1,9 +1,0 @@
-{
-  "fileserverfolder": "c:/jsondata/",
-  "mqtt": {
-    "brokerURL": "mqtt://192.168.232.30",
-    "mqttPort": 1883,
-    "baseTopic": "Beckhoff_TwinCAT/Presorter_Apparatus/"
-  }
-}
-

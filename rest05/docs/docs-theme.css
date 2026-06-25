@@ -1,0 +1,78 @@
+/* docs-theme.css — overrides JSDoc's default look to match the hub page */
+:root {
+    --bg: #eef1f4; --surface: #fff; --ink: #1b2330; --ink-soft: #5d6b7e;
+    --line: #d4dae2; --accent: #d97706; --accent-soft: #fef3e2;
+    --mono: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    background: var(--bg) !important;
+    color: var(--ink) !important;
+    font-family: var(--sans) !important;
+    line-height: 1.6;
+}
+
+/* main content leaves room for the fixed sidebar */
+#main {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.5rem 2rem !important;
+    margin: 1.5rem 280px 1.5rem 1.5rem !important;  /* right margin clears the 250px nav */
+    width: auto !important;
+    float: none !important;
+}
+
+h1.page-title, h1, h2, h3, h4 {
+    color: var(--ink) !important;
+    font-family: var(--sans) !important;
+    letter-spacing: -0.01em;
+}
+h1.page-title { border-bottom: 2px solid var(--accent); padding-bottom: 0.4rem; }
+
+/* the function/member names */
+h4.name { color: var(--accent) !important; font-family: var(--mono) !important; }
+.signature, .type-signature { color: var(--ink-soft) !important; font-family: var(--mono) !important; }
+
+/* fixed nav sidebar on the right */
+nav {
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    width: 250px !important;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--surface) !important;
+    border-left: 1px solid var(--line);
+    padding: 1.5rem 1.2rem !important;
+    font-family: var(--sans);
+    margin: 0 !important;
+    float: none !important;
+}
+nav h2 a, nav h3 { color: var(--ink) !important; }
+nav a { color: var(--accent) !important; text-decoration: none; }
+nav a:hover { text-decoration: underline; }
+
+
+/* param tables */
+table.params, .params td, .params th {
+    border-color: var(--line) !important;
+    font-size: 0.85rem;
+}
+.params th { background: var(--accent-soft) !important; color: var(--ink) !important; }
+
+/* code / examples */
+.prettyprint, pre {
+    background: #0e1626 !important;
+    border-radius: 8px !important;
+    border: none !important;
+}
+code { font-family: var(--mono) !important; }
+/* footer also clears the sidebar */
+footer {
+    margin-right: 280px !important;
+    color: var(--ink-soft) !important;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+}

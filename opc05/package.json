@@ -1,6 +1,8 @@
 {
   "devDependencies": {
-    "@types/node": "^25.9.3"
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.4",
+    "@types/pg": "^8.20.0"
   },
   "name": "project00",
   "version": "1.0.0",
@@ -8,8 +10,10 @@
   "main": "index.js",
   "dependencies": {
     "@types/mqtt": "^0.0.34",
+    "express": "^5.2.1",
     "mqtt": "^5.15.1",
     "node-opcua-client": "^2.173.1",
+    "pg": "^8.22.0",
     "undici-types": "^7.24.6"
   },
   "scripts": {
