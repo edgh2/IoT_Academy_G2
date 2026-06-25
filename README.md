@@ -41,14 +41,14 @@ HTTP by **rest05** to the dashboards.
 | 1 | **opc05** | OPC-UA → MQTT | Reads DR#1 status/position/torque tags, publishes under the Magna namespace |
 | 2 | **db01** | MQTT → PostgreSQL | Subscribes, validates payloads, persists telemetry and equipment status |
 | 3 | **rest05** | PostgreSQL → HTTP | Serves stored + computed data so dashboards never touch the database directly |
-| 4 | **Dashboards** | HTTP / SQL | Grafana and web visualizations for floor operators and engineers |
+| 4 | **Dashboards** | MQTT / HTTP / SQL | Grafana and web visualizations for floor operators and engineers |
 
 | Stage | Service | Role |
 |-------|---------|------|
 | 1 | **opc05** | Reads DR#1 status/position/torque tags via OPC-UA, publishes to the MQTT broker under the Magna namespace |
 | 2 | **db01** | Subscribes to MQTT, validates payloads, persists to PostgreSQL (telemetry + equipment_status) |
 | 3 | **rest05** | Serves stored data over HTTP so dashboards never touch the database directly |
-| 4 | **dashboard** | Web-based and Grafana visualizations consuming the REST API and database |
+| 4 | **dashboard** | Web-based and Grafana visualizations consuming the REST API, MQTT, and database |
 
 ---
 
