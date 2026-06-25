@@ -23,10 +23,10 @@ standardized protocols (OPC-UA, MQTT, REST):
 │ Beckhoff PLC │ ────────► │  opc05   │ ────────► │     db01     │
 │  DR#1 source │           │ Publisher│           │  Subscriber  │
 └──────────────┘           └──────────┘           └──────┬───────┘
-                                                          │
-                                                          ▼
+                                                         │
+                                                         ▼
 ┌──────────────┐   HTTP    ┌──────────┐         ┌──────────────┐
-│  Dashboards  │ ◄──────── │  rest05  │ ◄─────── │  PostgreSQL  │
+│  Dashboards  │ ◄──────── │  rest05  │ ◄───────│  PostgreSQL  │
 │ Grafana, web │           │ REST API │         │ telemetry,   │
 └──────────────┘           └──────────┘         │ status       │
                                                 └──────────────┘
