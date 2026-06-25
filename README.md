@@ -20,34 +20,37 @@ standardized protocols (OPC-UA, MQTT, REST):
 
 ```text
 ┌──────────────┐  OPC-UA   ┌──────────┐   MQTT    ┌──────────────┐
-│ Beckhoff PLC │ ────────► │  opc05   │ ────────► │     db01     │
+│ Beckhoff PLC │ ────────► │  Opc     │ ────────► │     MQTT     │
 │  DR#1 source │           │ Publisher│           │  Subscriber  │
 └──────────────┘           └──────────┘           └──────┬───────┘
                                                          │
                                                          ▼
 ┌──────────────┐   HTTP    ┌──────────┐         ┌──────────────┐
-│  Dashboards  │ ◄──────── │  rest05  │ ◄───────│  PostgreSQL  │
-│ Grafana, web │           │ REST API │         │ telemetry,   │
+│  Dashboards  │ ◄──────── │ REST API │ ◄───────│  PostgreSQL  │
+│ Grafana, Web │           │ Service  │         │ telemetry,   │
 └──────────────┘           └──────────┘         │ status       │
-                                                └──────────────┘
+      ▲                                         └───────┬──────┘
+      │                                                 │
+      │                                                 │
+      │_________________________________________________|
 ```
 
-Data flows in one direction: the PLC is read over OPC-UA by **opc05**, published to
-the MQTT broker, consumed by **db01** and written to PostgreSQL, then served over
-HTTP by **rest05** to the dashboards.
+Data flows in one direction: the PLC is read over OPC-UA by **Opc Publisher**, published to
+the MQTT broker, consumed by **Postgres Service1** and written to PostgreSQL, then served over
+HTTP by **REST API Service** to the dashboards.
 
 | Stage | Service | Protocol in → out | Role |
 |-------|---------|-------------------|------|
-| 1 | **opc05** | OPC-UA → MQTT | Reads DR#1 status/position/torque tags, publishes under the Magna namespace |
-| 2 | **db01** | MQTT → PostgreSQL | Subscribes, validates payloads, persists telemetry and equipment status |
-| 3 | **rest05** | PostgreSQL → HTTP | Serves stored + computed data so dashboards never touch the database directly |
+| 1 | **Opc Publisher** | OPC-UA → MQTT | Reads DR#1 status/position/torque tags, publishes under the Magna namespace |
+| 2 | **Postgres Service1** | MQTT → PostgreSQL | Subscribes, validates payloads, persists telemetry and equipment status |
+| 3 | **REST API Service** | PostgreSQL → HTTP | Serves stored + computed data so dashboards never touch the database directly |
 | 4 | **Dashboards** | MQTT / HTTP / SQL | Grafana and web visualizations for floor operators and engineers |
 
 | Stage | Service | Role |
 |-------|---------|------|
-| 1 | **opc05** | Reads DR#1 status/position/torque tags via OPC-UA, publishes to the MQTT broker under the Magna namespace |
-| 2 | **db01** | Subscribes to MQTT, validates payloads, persists to PostgreSQL (telemetry + equipment_status) |
-| 3 | **rest05** | Serves stored data over HTTP so dashboards never touch the database directly |
+| 1 | **Opc Publisher** | Reads DR#1 status/position/torque tags via OPC-UA, publishes to the MQTT broker under the Magna namespace |
+| 2 | **Postgres Service1** | Subscribes to MQTT, validates payloads, persists to PostgreSQL (telemetry + equipment_status) |
+| 3 | **REST API Service** | Serves stored data over HTTP so dashboards never touch the database directly |
 | 4 | **dashboard** | Web-based and Grafana visualizations consuming the REST API, MQTT, and database |
 
 ---
@@ -56,9 +59,9 @@ HTTP by **rest05** to the dashboards.
 
 | Path | Contents |
 |------|----------|
-| `opc05/` | OPC-UA → MQTT publisher microservice (TypeScript) |
-| `db01/` | MQTT → PostgreSQL subscriber microservice (TypeScript) |
-| `rest05/` | REST API microservice + served web dashboards (TypeScript / Express) |
+| `Opc Publisher/` | OPC-UA → MQTT publisher microservice (TypeScript) |
+| `Postgres Service1/` | MQTT → PostgreSQL subscriber microservice (TypeScript) |
+| `REST API Service/` | REST API microservice + served web dashboards (TypeScript / Express) |
 | `dashboard/` | Grafana dashboard definition (JSON export) — importable into Grafana to recreate the work-cell visualizations |
 | `index.html` | Documentation hub — links to each service's generated JSDoc site |
 | `docs-theme.css` | Shared styling applied to the generated documentation |
@@ -79,7 +82,7 @@ DR#1 (and the wider work cell) expose three categories of data:
 - **Torque** — per-motor actual torque, used to approximate motor wear (stored in
   `telemetry`)
 
-The pipeline also ingests data from a second robot cell, and `rest05` supports
+The pipeline also ingests data from a second robot cell, and `REST API Service` supports
 querying both this team's schema and the partner team's schema.
 
 ---
