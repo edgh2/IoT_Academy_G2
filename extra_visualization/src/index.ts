@@ -1,7 +1,8 @@
 /*
  * index.ts
  */
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config({ path: path.join(path.dirname(import.meta.filename), '../../.env') });
 var config:any = readFileAsJSON("./config.json")
 
 import * as fs from 'fs';
