@@ -1,6 +1,7 @@
 /*
  * index.ts
  */
+import 'dotenv/config';
 var config:any = readFileAsJSON("./config.json")
 
 import * as fs from 'fs';
@@ -20,23 +21,6 @@ const pool = new pg.Pool({
 });
 
 const PORT:number = 5000;
-
-function readFileAsArray(fname:string): string[]
-{
-	try {
-		let tag = fs.readFileSync(fname, "utf8")
-            .split(/\r?\n/)
-            .map(line => (line.split("//")[0] ?? "").trim())
-            .map(line => (line.split("#")[0] ?? "").trim())
-            .filter(line => line.length > 0);
-
-		console.log(tag);
-		return tag
-	} catch (err) {
-		console.log (err);
-		return [];
-	}
-}
 
 function readFileAsJSON(fname:string): any
 {
