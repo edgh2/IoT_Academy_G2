@@ -206,6 +206,31 @@ async function filterHandler(req:Request, res:Response): Promise<void>
 
 	// log the built query for diagnostics (paste into psql to verify)
 	console.log(sql_command);
+		if (db==="g2")
+		{
+			dbconfig.database = config.g2dbname;
+			sql_command = `SELECT "timestamp" at time zone 'utc' at time zone 'america/toronto'
+							, deviceid, metric, value
+								FROM public.telemetry
+								where metric = '${metric}' and deviceid= '${device}'
+									and timestamp between '${from.toISOString()}' and '${to.toISOString()}'
+								order by timestamp desc
+								limit ${limit};`;
+		}
+		else
+		{
+			dbconfig.database = config.g1dbname;
+			sql_command = `SELECT tag, CASE WHEN position('Rob' in tag) = 0 THEn 'cell'
+									else substring(tag, position('Rob' in tag), 4) end as "device",
+									datestamp "timestamp", value
+								FROM public."tb_OPC_TagLogs" t
+									inner join public."tb_OPC_TagSetup" s on "tagSetupUID" = s.uid
+								where tag = '${metric}' and datestamp between '${from.toISOString()}' and '${to.toISOString()}'
+								order by datestamp desc
+								limit ${limit};`;
+		}
+		
+		console.log(sql_command);
 
 	// connect, run the query, capture rows as JSON, always disconnect
 	const dbclient = new pg.Client (dbconfig);

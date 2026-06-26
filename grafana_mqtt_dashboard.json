@@ -1,0 +1,1208 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 9,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "grafana-mqtt-datasource",
+        "uid": "fe4femfeqjx1cd"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": true,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 1000,
+            "axisSoftMin": -1000,
+            "fillOpacity": 50,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 10
+            },
+            "pointStrokeWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "points"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "value 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "X"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "value 2"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Y"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 10,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "mapping": "auto",
+        "series": [
+          {
+            "frame": {
+              "matcher": {
+                "id": "byIndex",
+                "options": 0
+              }
+            }
+          }
+        ],
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-mqtt-datasource",
+            "uid": "fe4femfeqjx1cd"
+          },
+          "refId": "A",
+          "topic": "magna/iotacademy/conestoga/smart/presorter/G2/${Equipment}/ROBOTPOS.X"
+        },
+        {
+          "datasource": {
+            "type": "grafana-mqtt-datasource",
+            "uid": "fe4femfeqjx1cd"
+          },
+          "hide": false,
+          "refId": "B",
+          "topic": "magna/iotacademy/conestoga/smart/presorter/G2//${Equipment}/ROBOTPOS.Y"
+        }
+      ],
+      "title": "${Equipment} x-y position",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "timestamp"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "timestamp",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        }
+      ],
+      "type": "xychart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfq448154nklce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 10,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bfq448154nklce"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH data AS (\r\n  SELECT \r\n    timestamp,\r\n    deviceid,\r\n    metric,\r\n    value,\r\n    \r\n    CASE \r\n      WHEN ABS(value) > 20 THEN 1\r\n      ELSE 0\r\n    END AS above_threshold\r\n  FROM telemetry\r\n  WHERE deviceid = '${Equipment}' \r\n  and metric = 'MACTTORQUE_1'\r\n    AND timestamp >= NOW() - INTERVAL '1 hour'\r\n),\r\n\r\nevents AS (\r\n  SELECT *,\r\n    LAG(above_threshold) OVER (\r\n      PARTITION BY deviceid, metric\r\n      ORDER BY timestamp\r\n    ) AS prev_value\r\n  FROM data\r\n)\r\n\r\nSELECT \r\n  deviceid,\r\n  metric,\r\n  COUNT(*) AS threshold_crossings\r\nFROM events\r\nWHERE above_threshold = 1\r\n  AND COALESCE(prev_value, 0) = 0\r\nGROUP BY deviceid, metric;\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "${Equipment} Motor 1 Torque exceeds 80% of max. / last hour",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfq448154nklce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 17,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bfq448154nklce"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH data AS (\r\n  SELECT \r\n    timestamp,\r\n    deviceid,\r\n    metric,\r\n    value,\r\n    \r\n    CASE \r\n      WHEN ABS(value) > 20 THEN 1\r\n      ELSE 0\r\n    END AS above_threshold\r\n  FROM telemetry\r\n  WHERE deviceid = '${Equipment}' \r\n  and metric = 'MACTTORQUE_2'\r\n    AND timestamp >= NOW() - INTERVAL '1 hour'\r\n),\r\n\r\nevents AS (\r\n  SELECT *,\r\n    LAG(above_threshold) OVER (\r\n      PARTITION BY deviceid, metric\r\n      ORDER BY timestamp\r\n    ) AS prev_value\r\n  FROM data\r\n)\r\n\r\nSELECT \r\n  deviceid,\r\n  metric,\r\n  COUNT(*) AS threshold_crossings\r\nFROM events\r\nWHERE above_threshold = 1\r\n  AND COALESCE(prev_value, 0) = 0\r\nGROUP BY deviceid, metric;\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "${Equipment} Motor 2Torque exceeds 80% of max. / last hour",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfq448154nklce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 10,
+        "y": 3
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bfq448154nklce"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH data AS (\r\n  SELECT \r\n    timestamp,\r\n    deviceid,\r\n    metric,\r\n    value,\r\n    \r\n    CASE \r\n      WHEN ABS(value) > 20 THEN 1\r\n      ELSE 0\r\n    END AS above_threshold\r\n  FROM telemetry\r\n  WHERE deviceid = 'Rob1' \r\n  and metric = 'MACTTORQUE_3'\r\n    AND timestamp >= NOW() - INTERVAL '1 hour'\r\n),\r\n\r\nevents AS (\r\n  SELECT *,\r\n    LAG(above_threshold) OVER (\r\n      PARTITION BY deviceid, metric\r\n      ORDER BY timestamp\r\n    ) AS prev_value\r\n  FROM data\r\n)\r\n\r\nSELECT \r\n  deviceid,\r\n  metric,\r\n  COUNT(*) AS threshold_crossings\r\nFROM events\r\nWHERE above_threshold = 1\r\n  AND COALESCE(prev_value, 0) = 0\r\nGROUP BY deviceid, metric;\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "${Equipment} Motor 3 Torque exceeds 80% of max. / last hour",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfq448154nklce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 17,
+        "y": 3
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bfq448154nklce"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH data AS (\r\n  SELECT \r\n    timestamp,\r\n    deviceid,\r\n    metric,\r\n    value,\r\n    \r\n    CASE \r\n      WHEN ABS(value) > 20 THEN 1\r\n      ELSE 0\r\n    END AS above_threshold\r\n  FROM telemetry\r\n  WHERE deviceid = 'Rob1' \r\n  and metric = 'MACTTORQUE_4'\r\n    AND timestamp >= NOW() - INTERVAL '1 hour'\r\n),\r\n\r\nevents AS (\r\n  SELECT *,\r\n    LAG(above_threshold) OVER (\r\n      PARTITION BY deviceid, metric\r\n      ORDER BY timestamp\r\n    ) AS prev_value\r\n  FROM data\r\n)\r\n\r\nSELECT \r\n  deviceid,\r\n  metric,\r\n  COUNT(*) AS threshold_crossings\r\nFROM events\r\nWHERE above_threshold = 1\r\n  AND COALESCE(prev_value, 0) = 0\r\nGROUP BY deviceid, metric;\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "${Equipment} Motor 4 Torque exceeds 80% of max. / last hour",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfq448154nklce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ff0000",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 10,
+        "y": 6
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^status_value$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "none",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bfq448154nklce"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \r\n  CASE \r\n    WHEN status = true THEN 1\r\n    ELSE 0\r\n  END as status_value\r\nFROM equipment_status\r\nWHERE deviceid = '${Equipment}'\r\nAND status_name = 'INITIALIZED'\r\nORDER BY timestamp DESC\r\nLIMIT 1",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "${Equipment} initialized",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [],
+            "fields": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfq448154nklce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ff0000",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 13,
+        "y": 6
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^status_value$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "none",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bfq448154nklce"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \r\n  CASE \r\n    WHEN status = true THEN 1\r\n    ELSE 0\r\n  END as status_value\r\nFROM equipment_status \r\nWHERE deviceid = '${Equipment}'\r\nAND status_name = 'RUNNING'\r\nORDER BY timestamp DESC\r\nLIMIT 1",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "${Equipment} Running",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [],
+            "fields": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfq448154nklce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ff0000",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 16,
+        "y": 6
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^status_value$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "none",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bfq448154nklce"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \r\n  CASE \r\n    WHEN status = true THEN 1\r\n    ELSE 0\r\n  END as status_value\r\nFROM equipment_status\r\nWHERE deviceid = '${Equipment}'\r\nAND status_name = 'PAUSED'\r\nORDER BY timestamp DESC\r\nLIMIT 1",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "${Equipment} Paused",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "bfq448154nklce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ff0000",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 19,
+        "y": 6
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^status_value$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "none",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bfq448154nklce"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \r\n  CASE \r\n    WHEN status = true THEN 1\r\n    ELSE 0\r\n  END as status_value\r\nFROM equipment_status\r\nWHERE deviceid = '${Equipment}'\r\nAND status_name = 'WSVIOLATION'\r\nORDER BY timestamp DESC\r\nLIMIT 1",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "${Equipment} Violation",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [],
+            "fields": {}
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-mqtt-datasource",
+        "uid": "fe4femfeqjx1cd"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "forceNm"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "abs(value 1)"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "${Equipment} Torque 1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "abs(value 2)"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "${Equipment} Torque 2"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "abs(value 3)"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "${Equipment} Torque 3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "abs(value 4)"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "${Equipment} Torque 4"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-mqtt-datasource",
+            "uid": "fe4femfeqjx1cd"
+          },
+          "refId": "A",
+          "topic": "magna/iotacademy/conestoga/smart/presorter/G2//${Equipment}/MACTTORQUE_1"
+        },
+        {
+          "datasource": {
+            "type": "grafana-mqtt-datasource",
+            "uid": "fe4femfeqjx1cd"
+          },
+          "hide": false,
+          "refId": "B",
+          "topic": "magna/iotacademy/conestoga/smart/presorter/G2//${Equipment}/MACTTORQUE_2"
+        },
+        {
+          "datasource": {
+            "type": "grafana-mqtt-datasource",
+            "uid": "fe4femfeqjx1cd"
+          },
+          "hide": false,
+          "refId": "C",
+          "topic": "magna/iotacademy/conestoga/smart/presorter/G2//${Equipment}/MACTTORQUE_3"
+        },
+        {
+          "datasource": {
+            "type": "grafana-mqtt-datasource",
+            "uid": "fe4femfeqjx1cd"
+          },
+          "hide": false,
+          "refId": "D",
+          "topic": "magna/iotacademy/conestoga/smart/presorter/G2//${Equipment}/MACTTORQUE_4"
+        }
+      ],
+      "title": "${Equipment} Torque",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "timestamp"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "unary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false,
+            "unary": {
+              "fieldName": "value 1",
+              "operator": "abs"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "unary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false,
+            "unary": {
+              "fieldName": "value 2",
+              "operator": "abs"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "unary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false,
+            "unary": {
+              "fieldName": "value 3",
+              "operator": "abs"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "unary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false,
+            "unary": {
+              "fieldName": "value 4",
+              "operator": "abs"
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "value 1": true,
+              "value 2": true,
+              "value 3": true,
+              "value 4": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 40,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "Rob1",
+          "value": "Rob1"
+        },
+        "includeAll": false,
+        "name": "Equipment",
+        "options": [
+          {
+            "selected": false,
+            "text": "cell",
+            "value": "cell"
+          },
+          {
+            "selected": true,
+            "text": "Rob1",
+            "value": "Rob1"
+          },
+          {
+            "selected": false,
+            "text": "Rob2",
+            "value": "Rob2"
+          },
+          {
+            "selected": false,
+            "text": "Rob3",
+            "value": "Rob3"
+          }
+        ],
+        "query": "cell, Rob1, Rob2, Rob3",
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30s",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "MQTT Dashboard",
+  "uid": "afq48n1yq3ev4a",
+  "version": 25,
+  "weekStart": ""
+}
