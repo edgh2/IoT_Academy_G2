@@ -1,6 +1,8 @@
 /*
  * index.ts
  */
+import * as dotenv from 'dotenv';
+dotenv.config({ path: path.join(path.dirname(import.meta.filename), '../../.env') });
 var config = readFileAsJSON("./config.json");
 import * as fs from 'fs';
 import * as path from 'path';
@@ -14,21 +16,6 @@ const pool = new pg.Pool({
     password: process.env.POSTGRESPW
 });
 const PORT = 5000;
-function readFileAsArray(fname) {
-    try {
-        let tag = fs.readFileSync(fname, "utf8")
-            .split(/\r?\n/)
-            .map(line => (line.split("//")[0] ?? "").trim())
-            .map(line => (line.split("#")[0] ?? "").trim())
-            .filter(line => line.length > 0);
-        console.log(tag);
-        return tag;
-    }
-    catch (err) {
-        console.log(err);
-        return [];
-    }
-}
 function readFileAsJSON(fname) {
     try {
         let data = fs.readFileSync(fname).toString();
