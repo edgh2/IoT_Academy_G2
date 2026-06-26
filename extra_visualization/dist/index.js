@@ -293,10 +293,9 @@ function main() {
     });
     app.use(apiRouter);
     app.get('/', (req, res) => {
-        res.send("Welcome to our first TypeScript REST API App!");
+        res.send("");
     });
     app.listen(PORT, () => {
-        console.log(`Hello Seattle, I’m listening! (on port ${PORT})`);
     });
 }
 main();

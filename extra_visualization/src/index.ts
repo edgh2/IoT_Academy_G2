@@ -351,6 +351,12 @@ function main()
 
 	app.use(apiRouter);
 
+	app.get('/', (req: Request, res: Response) => {
+		res.send("");
+	});
+
+	app.listen(PORT, () => {
+	});
 }
 
 main();
