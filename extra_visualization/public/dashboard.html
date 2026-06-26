@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tag Status Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+
+<header>
+  <h1>Robot Monitor</h1>
+  <span class="subtitle">OPC tag dashboard</span>
+  <div class="spacer"></div>
+  <div class="status-indicator">
+    <span class="dot" id="conn-dot"></span>
+    <span id="conn-label">—</span>
+  </div>
+</header>
+
+<div class="toolbar">
+  <nav class="tabs">
+    <button class="tab active" data-tab="status">Status</button>
+    <button class="tab" data-tab="torque">Torque</button>
+    <button class="tab" data-tab="position">Position</button>
+  </nav>
+
+  <div class="sep"></div>
+
+  <label for="robot-filter">Robot</label>
+  <select id="robot-filter">
+    <option value="all">All robots</option>
+  </select>
+
+  <span id="from-group" style="display:none; align-items:center; gap:8px;">
+    <div class="sep"></div>
+    <label for="from-date">From</label>
+    <input type="datetime-local" id="from-date" />
+    <label for="to-date">To</label>
+    <input type="datetime-local" id="to-date" />
+  </span>
+
+  <input type="hidden" id="api-url" value="http://localhost:5000" />
+
+  <label for="auto-refresh">Auto-refresh</label>
+  <select id="auto-refresh">
+    <option value="0">Off</option>
+    <option value="1" selected>1s</option>
+    <option value="5">5s</option>
+    <option value="10">10s</option>
+    <option value="30">30s</option>
+    <option value="60">60s</option>
+  </select>
+
+  <button id="refresh-btn" class="primary">
+    Refresh
+  </button>
+</div>
+
+<main>
+  <div id="error-bar" class="error-bar" style="display:none"></div>
+
+  <!-- Status tab -->
+  <div id="tab-status">
+    <div id="content"><div class="empty">Loading…</div></div>
+  </div>
+
+  <!-- Torque tab -->
+  <div id="tab-torque" style="display:none">
+    <div id="torque-content"><div class="empty">Loading…</div></div>
+  </div>
+
+  <!-- Position tab -->
+  <div id="tab-position" style="display:none">
+    <div id="position-content"><div class="empty">Loading…</div></div>
+  </div>
+</main>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
